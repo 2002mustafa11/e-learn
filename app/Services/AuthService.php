@@ -7,9 +7,11 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
-
+use App\Traits\HandleServiceErrors;
+use Throwable;
 class AuthService
 {
+    use HandleServiceErrors;
     protected $authRepository;
 
     public function __construct(AuthRepository $authRepository)
@@ -17,11 +19,10 @@ class AuthService
         $this->authRepository = $authRepository;
     }
 
-    public function register(array $data)
+    public function register(array $data): array
     {
         try {
             $data['password'] = Hash::make($data['password']);
-
             $user = $this->authRepository->register($data);
 
             $token = JWTAuth::fromUser($user);
@@ -29,24 +30,14 @@ class AuthService
             return [
                 'success' => true,
                 'message' => 'Account registered successfully',
-                'code' => 201,
-                'data' => [
-                    'access_token' => $token,
-                    'token_type' => 'bearer',
-                    'expires_in' => auth('api')->factory()->getTTL() * 60,
-                    'user' => $user
+                'code'    => 201,
+                'data'    => [
+                    'token' => $token,
+                    'user'  => $user
                 ]
             ];
-
-        } catch (\Exception $e) {
-            Log::error('Register Error: '.$e->getMessage());
-
-            return [
-                'success' => false,
-                'message' => 'Registration failed, please try again',
-                'code' => 500,
-                'data' => []
-            ];
+        } catch (Throwable $e) {
+            return $this->handleServiceException($e, 'Register Error');
         }
     }
 
