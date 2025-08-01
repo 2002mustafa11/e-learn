@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Traits\ApiResponse;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use Exception;
+
 class AuthController extends Controller
 {
     use ApiResponse;
@@ -19,28 +21,39 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request)
     {
-        $result = $this->authService->register($request->validated());
+        try {
+            $result = $this->authService->register($request->validated());
 
-        if (!$result['success']) {
-            return $this->errorResponse($result['message'], [], $result['code']);
+            if (!$result['success']) {
+                return $this->errorResponse($result['message'], [], $result['code']);
+            }
+
+            return $this->successResponse($result['data'], $result['message'], $result['code']);
+        } catch (Exception $e) {
+            return $this->errorResponse('An error occurred during registration', [], 500);
         }
-
-        return $this->successResponse($result['data'], $result['message'], $result['code']);
     }
 
     public function login(LoginRequest $request)
     {
-        $result = $this->authService->login($request->only('email', 'password'));
-        if (!$result) {
-            return $this->errorResponse('Invalid login credentials', [], 401);
+        try {
+            $result = $this->authService->login($request->only('email', 'password'));
+            if (!$result) {
+                return $this->errorResponse('Invalid login credentials', [], 401);
+            }
+            return $this->successResponse($result, 'Login successful', 200);
+        } catch (Exception $e) {
+            return $this->errorResponse('An error occurred during login', [], 500);
         }
-        return $this->successResponse($result, 'Login successful', 200);
     }
-
 
     public function logout()
     {
-        $this->authService->logout();
-        return $this->successResponse([], 'Logout successful');
+        try {
+            $this->authService->logout();
+            return $this->successResponse([], 'Logout successful');
+        } catch (Exception $e) {
+            return $this->errorResponse('An error occurred during logout', [], 500);
+        }
     }
 }
