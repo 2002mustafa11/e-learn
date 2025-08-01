@@ -9,7 +9,7 @@ use App\Models\Video;
 
 class YoutubeVideoController extends Controller
 {
-    // جلب التوكن وتجهيزه عبر AuthenticateService
+
     protected function getAuthService(string $identifier)
     {
         $record = YoutubeToken::where('identifier', $identifier)->first();
@@ -24,11 +24,11 @@ class YoutubeVideoController extends Controller
             'refresh_token' => $record->refresh_token,
             'expires_in' => $expiresIn,
         ]);
-        // يسمح للتوكن بتجديد نفسه إذا انتهت صلاحيته
+
         return $auth;
     }
 
-    // رفع فيديو
+
     public function upload(Request $request)
     {
         $request->validate([
@@ -39,9 +39,8 @@ class YoutubeVideoController extends Controller
         ]);
 
         $auth = $this->getAuthService($request->identifier);
-        $token = $auth->getAccessToken(); // يحتوي على التوكن الجديد إن تم تجديده
+        $token = $auth->getAccessToken();
 
-        // تحديث الصلاحية في DB
         if (isset($token['access_token'])) {
             YoutubeToken::updateOrCreate(
                 ['identifier' => $request->identifier],
@@ -64,7 +63,7 @@ class YoutubeVideoController extends Controller
 
         $resp = $vs->uploadVideo($auth->getAccessToken(), $request->file('video')->getRealPath(), $data);
 
-        // حفظ رابط الفيديو أيضاً في جدول الفيديوهات
+
         $video = Video::create([
             'title' => $request->title,
             'youtube_video_id' => $resp['id'] ?? null,
@@ -83,7 +82,7 @@ class YoutubeVideoController extends Controller
         return response()->json($resp);
     }
 
-    // حذف فيديو
+
     public function delete(Request $request, string $identifier)
     {
         $auth = $this->getAuthService($identifier);
@@ -91,8 +90,6 @@ class YoutubeVideoController extends Controller
         $resp = $vs->deleteVideo($auth->getAccessToken(), $request->video_id);
         return response()->json($resp);
     }
-
-    // تقييم فيديو
     public function rate(Request $request, string $identifier)
     {
         $auth = $this->getAuthService($identifier);

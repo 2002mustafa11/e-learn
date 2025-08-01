@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('student_profiles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->string('grade_level')->nullable();  // المرحلة الدراسية
+            $table->string('grade_level')->nullable();  
             $table->date('birth_date')->nullable();
             $table->timestamps();
         });

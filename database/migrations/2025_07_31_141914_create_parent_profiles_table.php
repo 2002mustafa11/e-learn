@@ -15,7 +15,7 @@ return new class extends Migration
     Schema::create('parent_profiles', function (Blueprint $table) {
     $table->id();
     $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-    $table->string('relation_type')->nullable(); // أب - أم - وصي
+    $table->string('relation_type')->nullable(); 
     $table->string('job')->nullable();
     $table->timestamps();
 });

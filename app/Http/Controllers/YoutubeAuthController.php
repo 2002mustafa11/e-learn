@@ -22,7 +22,6 @@ class YoutubeAuthController extends Controller
         $auth = new AuthenticateService();
         $authResponse = $auth->authChannelWithCode($code);
 
-        // حفظ البيانات في جدول tokens
         DB::table('youtube_tokens')->updateOrInsert(
             ['identifier' => $identifier],
             [

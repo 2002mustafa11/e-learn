@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Services\AuthService;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Traits\ApiResponse;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 class AuthController extends Controller
 {
+    use ApiResponse;
     protected $authService;
 
     public function __construct(AuthService $authService)
@@ -14,51 +17,27 @@ class AuthController extends Controller
         $this->authService = $authService;
     }
 
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|string|min:6',
-            'role' => 'required|in:student,parent,teacher,admin',
-        ]);
-
-        $user = $this->authService->register($validated);
-
-        return response()->json([
-            'message' => 'تم تسجيل الحساب بنجاح',
+        $user = $this->authService->register($request->validated());
+        return $this->successResponse([
             'user' => $user
-        ], 201);
+        ],'Account registered successfully');
     }
 
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
-        dd($request->input());
-        $validated = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|string|min:6',
-        ]);
-        $result = $this->authService->login($validated);
-
+        $result = $this->authService->login($request->only('email', 'password'));
         if (!$result) {
-            return response()->json([
-                'status' => false,
-                'message' => 'بيانات تسجيل الدخول غير صحيحة',
-            ], 401);
+            return $this->errorResponse('Invalid login credentials', [], 401);
         }
-
-        return response()->json([
-            'status' => true,
-            'message' => 'تم تسجيل الدخول بنجاح',
-            'data' => $result,
-        ], 200);
+        return $this->successResponse($result, 'Login successful', 200);
     }
 
 
     public function logout()
     {
         $this->authService->logout();
-
-        return response()->json(['message' => 'تم تسجيل الخروج بنجاح']);
+        return $this->successResponse([], 'Logout successful');
     }
 }
