@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use App\Traits\HandleServiceErrors;
 use Throwable;
+use app\Models\User;
 class AuthService
 {
     use HandleServiceErrors;
@@ -43,52 +44,36 @@ class AuthService
 
     public function login(array $credentials): array
     {
-        try {
-            if (!$token = JWTAuth::attempt($credentials)) {
-                return [
-                    'success' => false,
-                    'message' => 'Invalid login credentials',
-                    'code' => 401,
-                    'data' => []
-                ];
-            }
-
-            $user = auth()->user();
-            $deviceToken = $user->device_token ?? uniqid('device_', true);
-
-            $this->authRepository->Login($user, request()->ip(), $deviceToken);
-
-            return [
-                'success' => true,
-                'message' => 'Login successful',
-                'code' => 200,
-                'data' => [
-                    'access_token' => $token,
-                    'token_type' => 'bearer',
-                    'expires_in' => auth('api')->factory()->getTTL() * 60,
-                    'user' => $user
-                ]
-            ];
-
-        } catch (JWTException $e) {
-            Log::error('JWT Login Error: '.$e->getMessage());
-
+        if (!$token = auth()->attempt($credentials)) {
             return [
                 'success' => false,
-                'message' => 'Could not create token, please try again later',
-                'code' => 500,
-                'data' => []
-            ];
-        } catch (\Exception $e) {
-            Log::error('Login Error: '.$e->getMessage());
-
-            return [
-                'success' => false,
-                'message' => 'Unexpected error occurred',
-                'code' => 500,
-                'data' => []
+                'message' => 'Invalid login credentials'
             ];
         }
+
+        $user = auth()->user();
+
+        if ($user->last_login_at !== null) {
+            auth()->logout();
+            return [
+                'success' => false,
+                'message' => 'You are already logged in on another device.'
+            ];
+        }
+        $this->authRepository->login($user);
+        return [
+            'success'      => true,
+            'message'      => 'Login successful',
+            'access_token' => $token,
+            'token_type'   => 'bearer',
+            'expires_in'   => auth()->factory()->getTTL() * 60,
+            'user'         => [
+                'id'    => $user->id,
+                'name'  => $user->name,
+                'email' => $user->email,
+                'role'  => $user->role,
+            ]
+        ];
     }
 
     public function logout()

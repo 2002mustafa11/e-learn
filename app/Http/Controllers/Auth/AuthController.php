@@ -21,6 +21,7 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request)
     {
+        // dd($request->validated());
         try {
             $result = $this->authService->register($request->validated());
 
@@ -38,8 +39,8 @@ class AuthController extends Controller
     {
         try {
             $result = $this->authService->login($request->only('email', 'password'));
-            if (!$result) {
-                return $this->errorResponse('Invalid login credentials', [], 401);
+            if (isset($result['success']) && !$result['success']) {
+                return $this->errorResponse($result['message'], [], 403);
             }
             return $this->successResponse($result, 'Login successful', 200);
         } catch (Exception $e) {

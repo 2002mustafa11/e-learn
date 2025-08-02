@@ -23,11 +23,12 @@ class RegisterRequest extends FormRequest
      */
     public function rules(): array
     {
-        $role = $this->input('role', 'student'); 
+        $role = $this->input('role', 'student');
 
         $rules = [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
+            'phone'    => ['required', 'regex:/^01[0125][0-9]{8}$/'],
             'password' => 'required|string|min:6|confirmed',
             'role' => 'required|in:student,teacher,parent,admin',
         ];

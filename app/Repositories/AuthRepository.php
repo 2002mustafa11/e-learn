@@ -12,6 +12,7 @@ class AuthRepository
 {
     public function register(array $data): User
     {
+
         return DB::transaction(function () use ($data) {
             $user = User::create([
                 'name'       => $data['name'],
@@ -19,6 +20,7 @@ class AuthRepository
                 'phone'      => $data['phone'] ?? null,
                 'password'   => $data['password'],
                 'role'       => $data['role'] ?? 'student',
+                'last_login_at'=> now(),
             ]);
 
             switch ($user->role) {
@@ -52,11 +54,9 @@ class AuthRepository
         });
     }
 
-    public function login(User $user, string $ip, string $deviceToken)
+    public function login(User $user)
     {
-        $user->last_login_ip = $ip;
         $user->last_login_at = now();
-        $user->device_token = $deviceToken;
         $user->save();
 
         return $user;
@@ -64,7 +64,7 @@ class AuthRepository
 
     public function logout(User $user)
     {
-        $user->device_token = null;
+        $user->last_login_at = null;
         $user->save();
 
         JWTAuth::invalidate(JWTAuth::getToken());

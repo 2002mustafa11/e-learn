@@ -23,9 +23,6 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->timestamp('last_login_at')->nullable();
 
-            $table->string('device_token')->nullable();
-            $table->ipAddress('last_login_ip')->nullable();
-
             $table->timestamps();
         });
 

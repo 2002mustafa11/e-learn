@@ -23,13 +23,39 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $role = $this->faker->randomElement(['student', 'parent', 'teacher', 'admin']);
+
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
-            'remember_token' => Str::random(10),
+            'name' => $this->faker->name,
+            'email' => $this->faker->unique()->safeEmail,
+            'phone' => $this->faker->phoneNumber,
+            'password' => Hash::make('password'),
+            'role' => $role,
+            'is_active' => true,
+            'last_login_at' => now(),
+            'device_token' => Str::random(32),
+            'last_login_ip' => $this->faker->ipv4,
         ];
+    }
+
+    public function student()
+    {
+        return $this->state(fn () => ['role' => 'student']);
+    }
+
+    public function parent()
+    {
+        return $this->state(fn () => ['role' => 'parent']);
+    }
+
+    public function teacher()
+    {
+        return $this->state(fn () => ['role' => 'teacher']);
+    }
+
+    public function admin()
+    {
+        return $this->state(fn () => ['role' => 'admin']);
     }
 
     /**
