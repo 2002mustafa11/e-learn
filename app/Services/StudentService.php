@@ -28,4 +28,9 @@ class StudentService
     {
         return $this->StudentRepository->delete($userId);
     }
+
+    public function assigned($parentId)
+    {
+        return $this->StudentRepository->attachParentToStudent($parentId);
+    }
 }

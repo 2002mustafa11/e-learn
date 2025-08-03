@@ -1,7 +1,7 @@
 <?php
 namespace App\Repositories;
 use App\Models\StudentProfile;
-
+use App\Models\User;
 class StudentRepository
 {
     public function index(){
@@ -27,4 +27,22 @@ class StudentRepository
         $student->user()->delete();
         return true;
     }
+    public function attachParentToStudent($parentId)
+    {
+        $studentId = auth()->user()->id;
+        // dd($studentId,$parentId);
+        $student = User::where('id',$studentId)->first();
+        $parent = User::where('id',$parentId)->first();
+
+        if (!$student || !$parent) {
+            return false;
+        }
+
+        if ($student->role != 'student') {
+            return false;
+        }
+        $parent->students()->attach($studentId);
+        return true;
+    }
+
 }

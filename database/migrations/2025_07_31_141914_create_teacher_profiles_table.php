@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('teacher_profiles', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->uuid('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('specialization')->nullable();
             $table->integer('experience_years')->default(0);
             $table->text('bio')->nullable();

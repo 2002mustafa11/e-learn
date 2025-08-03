@@ -13,9 +13,10 @@ Route::prefix('auth')->group(function () {
     Route::post('login', [AuthController::class, 'login']);
     Route::middleware('auth:api')->post('logout', [AuthController::class, 'logout']);
 });
-// middleware('auth:api')->
-Route::prefix('user')->group(function () {
+//
+Route::middleware('auth:api')->prefix('user')->group(function () {
 Route::get('/', [UserController::class, 'index']);
+Route::post('students/{parentId}/assign', [UserController::class, 'assignParent']);
 Route::get('/{id}', [UserController::class, 'show']);
 Route::put('/{id}', [UserController::class, 'update']);
 Route::delete('/{id}', [UserController::class, 'destroy']);

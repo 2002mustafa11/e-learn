@@ -85,4 +85,14 @@ class UserController extends Controller
             default => throw new \InvalidArgumentException('Invalid role provided.'),
         };
     }
+    public function assignParent($parentId)
+    {
+        // dd($parentId);
+        $result = $this->studentService->assigned($parentId);
+        if ($result) {
+            return response()->json(['message' => 'تم ربط الطالب بالوالد بنجاح!']);
+        } else {
+            return response()->json(['message' => 'فشل في ربط الطالب بالوالد!'], 400);
+        }
+    }
 }
