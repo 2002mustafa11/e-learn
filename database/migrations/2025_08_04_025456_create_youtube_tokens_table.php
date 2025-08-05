@@ -13,11 +13,15 @@ return new class extends Migration
     {
         Schema::create('youtube_tokens', function (Blueprint $table) {
             $table->id();
+            $table->uuid('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->text('access_token');
             $table->text('refresh_token')->nullable();
-            $table->timestamp('expires_at')->nullable();
+            $table->text('scope')->nullable();
+            $table->timestamp('expires_at');
+            $table->string('state')->nullable();
             $table->timestamps();
-        });
+          });
     }
 
     /**
