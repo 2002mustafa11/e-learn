@@ -90,9 +90,9 @@ class UserController extends Controller
         // dd($parentId);
         $result = $this->studentService->assigned($parentId);
         if ($result) {
-            return response()->json(['message' => 'تم ربط الطالب بالوالد بنجاح!']);
+            return $this->successResponse($result, 'Student has been successfully linked to parent!');
         } else {
-            return response()->json(['message' => 'فشل في ربط الطالب بالوالد!'], 400);
+            return $this->errorResponse('Failure to connect the student to the parent!');
         }
     }
 }

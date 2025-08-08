@@ -85,6 +85,10 @@ class User extends Authenticatable implements JWTSubject
            return $this->belongsToMany(User::class, 'parent_student', 'student_id', 'parent_id')
                        ->withTimestamps();
        }
+    public function isAdmin()
+    {
+        return $this->role=='admin';
+    }
     public function getJWTIdentifier()
     {
         return $this->id;

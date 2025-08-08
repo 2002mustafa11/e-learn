@@ -6,16 +6,32 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\YouTub\YouTubeAuthController;
 use App\Http\Controllers\Api\YouTub\YouTubeUploadController;
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\Category\CategoryController;
+use App\Http\Controllers\Api\Teacher\CourseController;
+use App\Http\Controllers\Api\Student\CourseController as StudentCourseController;
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
 // })->middleware('auth:sanctum');
+
+Route::prefix('teacher')->middleware(['auth:api', 'teacher'])->group(function () {
+    Route::apiResource('courses', CourseController::class);
+});
+
+Route::prefix('student')->middleware(['auth:api', 'student'])->group(function () {
+    Route::get('courses', [StudentCourseController::class, 'index']);
+    Route::get('courses/{course}', [StudentCourseController::class, 'show']);
+    Route::post('courses/{course}/enroll', [StudentCourseController::class, 'enroll']);
+});
+
+
+Route::apiResource('categories', CategoryController::class);
 
 Route::prefix('auth')->group(function () {
     Route::post('register', [AuthController::class, 'register']);
     Route::post('login', [AuthController::class, 'login']);
     Route::middleware('auth:api')->post('logout', [AuthController::class, 'logout']);
 });
-//
+
 Route::middleware('auth:api')->prefix('user')->group(function () {
 Route::get('/', [UserController::class, 'index']);
 Route::post('students/{parentId}/assign', [UserController::class, 'assignParent']);
