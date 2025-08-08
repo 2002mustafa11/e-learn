@@ -21,7 +21,6 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request)
     {
-        // dd($request->validated());
         try {
             $result = $this->authService->register($request->validated());
 

@@ -9,7 +9,7 @@ class Course extends Model
     protected $fillable = [
         'user_id','title', 'duration', 'enrolled', 'lectures',
         'skill_level', 'language', 'fee',
-        'description', 'learning_skill'
+        'description', 'learning_skill','image'
     ];
 
     public function categories()

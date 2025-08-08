@@ -19,13 +19,12 @@ class CourseService
 
     public function getAllCourses(array $filters = [])
     {
-        $filters['user_id'] = auth()->id();
         return $this->repo->allWithFilters($filters);
     }
-    // public function getAllCourses()
-    // {
-    //     return $this->repo->all();
-    // }
+    public function getAll()
+    {
+        return $this->repo->all();
+    }
 
     public function getCourseById($id)
     {
@@ -77,7 +76,7 @@ class CourseService
 
         $image = $manager->read($file->getPathname());
 
-        $image->resize(height: 800, keepAspectRatio: true);
+        $image->resize(height: 800);
 
         // watermark
         // $image->place('images/watermark.png');

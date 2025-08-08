@@ -89,6 +89,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->role=='admin';
     }
+
     public function getJWTIdentifier()
     {
         return $this->id;
@@ -98,7 +99,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return [
             'role' => $this->role,
-            'email' => $this->email
+            // 'email' => $this->email
         ];
     }
 }

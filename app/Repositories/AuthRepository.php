@@ -41,6 +41,7 @@ class AuthRepository
                     'relation_type' => $data['relation_type'] ?? null,
                     'job'           => $data['job'] ?? null,
                 ]),
+                'admin' => '',
                 default => throw new \Exception("Invalid role {$user->role}"),
             };
 

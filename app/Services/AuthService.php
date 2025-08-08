@@ -8,8 +8,6 @@ use Tymon\JWTAuth\Exceptions\JWTException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use App\Traits\HandleServiceErrors;
-use Throwable;
-use app\Models\User;
 class AuthService
 {
     use HandleServiceErrors;
@@ -25,7 +23,6 @@ class AuthService
         try {
             $data['password'] = Hash::make($data['password']);
             $user = $this->authRepository->register($data);
-
             $token = JWTAuth::fromUser($user);
 
             return [
@@ -37,7 +34,7 @@ class AuthService
                     'user'  => $user
                 ]
             ];
-        } catch (Throwable $e) {
+        } catch (JWTException $e) {
             return $this->handleServiceException($e, 'Register Error');
         }
     }

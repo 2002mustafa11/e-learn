@@ -25,6 +25,8 @@ class CourseController extends Controller
     {
         $filters = $request->only(['search', 'language', 'skill_level', 'category_id', 'per_page']);
         $courses = $this->service->getAllCourses($filters);
+        // $courses = $this->service->getAll();
+
         return $this->successResponse($courses, 'Courses fetched successfully.');
     }
 
@@ -41,6 +43,10 @@ class CourseController extends Controller
 
     public function purchase(Request $request, $courseId)
     {
+        $request->validate([
+            'price'           => 'required|numeric|min:0',
+            'payment_method'  => 'required|string|in:paypal,credit_card,bank_transfer', 
+        ]);
         try {
             $sale = $this->CourseSaleService->purchaseCourse(
                 auth()->id(),
@@ -52,11 +58,5 @@ class CourseController extends Controller
         } catch (\Exception $e) {
             return $this->errorResponse($e->getMessage(), [], 400);
         }
-    }
-    public function enroll($id)
-    {
-        // هنا ممكن نعمل منطق التسجيل في الكورس
-        // مثال: EnrollmentService->enrollStudent(auth()->id(), $id);
-        return $this->successResponse([], 'Enrolled successfully.');
     }
 }

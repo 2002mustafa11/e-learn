@@ -22,6 +22,7 @@ class CourseController extends Controller
     public function index(Request $request)
     {
         $filters = $request->only(['search', 'language', 'skill_level', 'per_page']);
+        $filters['user_id'] = auth()->id();
 
         $courses = $this->service->getAllCourses($filters);
         return $this->successResponse($courses, 'Courses fetched successfully.');
@@ -30,7 +31,7 @@ class CourseController extends Controller
     public function store(CourseRequest $request)
     {
         $data = $request->validated();
-
+        // dd($data['categories_id']);
         $course = $this->service->createCourse($data);
         return $this->successResponse($course, 'Course created successfully.', 201);
     }

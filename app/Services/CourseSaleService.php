@@ -3,8 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\CourseSaleRepository;
-use Illuminate\Support\Facades\DB;
-
+use Illuminate\Validation\ValidationException;
 class CourseSaleService
 {
     protected $repo;
@@ -17,11 +16,12 @@ class CourseSaleService
     public function purchaseCourse($userId, $courseId, $price, $paymentMethod)
     {
         $existing = $this->repo->findByUserAndCourse($userId, $courseId);
-        if ($existing && $existing->payment_status === 'paid') {
-            throw new \Exception('You have already purchased this course.');
+        if ($existing) {
+            throw ValidationException::withMessages([
+                'course' => 'You have already purchased this course.',
+            ]);
         }
 
-        return DB::transaction(function () use ($userId, $courseId, $price, $paymentMethod) {
             return $this->repo->create([
                 'user_id'        => $userId,
                 'course_id'      => $courseId,
@@ -30,7 +30,6 @@ class CourseSaleService
                 'payment_method' => $paymentMethod,
                 'purchased_at'   => now(),
             ]);
-        });
     }
 
     public function markAsPaid($saleId)

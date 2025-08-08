@@ -25,7 +25,7 @@ class CoursePolicy
     {
         // Allow viewing if user is the owner or if the course is published
         // Changed from false to a more practical implementation
-        return $user->id === $course->user_id || $course->is_published;
+        return $user->id === $course->user_id ;
     }
 
     /**

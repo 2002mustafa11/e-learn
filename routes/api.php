@@ -20,11 +20,10 @@ Route::prefix('teacher')->middleware(['auth:api', 'teacher'])->group(function ()
 Route::prefix('student')->middleware(['auth:api', 'student'])->group(function () {
     Route::get('courses', [StudentCourseController::class, 'index']);
     Route::get('courses/{course}', [StudentCourseController::class, 'show']);
-    Route::post('courses/{course}/enroll', [StudentCourseController::class, 'enroll']);
+    Route::post('courses/{course}/purchase', [StudentCourseController::class, 'purchase']);
 });
 
-
-Route::apiResource('categories', CategoryController::class);
+Route::middleware(['auth:api', 'admin'])->apiResource('categories', CategoryController::class);
 
 Route::prefix('auth')->group(function () {
     Route::post('register', [AuthController::class, 'register']);
