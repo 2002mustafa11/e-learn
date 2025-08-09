@@ -11,15 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('grades', function (Blueprint $table) {
+        Schema::create('pdf_files', function (Blueprint $table) {
             $table->id();
-            $table->uuid('student_id');
-            $table->unsignedBigInteger('exam_id');
-            $table->decimal('score', 5, 2);
             $table->timestamps();
-
-            $table->foreign('student_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('exam_id')->references('id')->on('exams')->onDelete('cascade');
         });
     }
 
@@ -28,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('grades');
+        Schema::dropIfExists('pdf_files');
     }
 };
