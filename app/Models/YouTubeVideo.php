@@ -26,9 +26,9 @@ class YouTubeVideo extends Model
 
     protected $dates = ['uploaded_at'];
 
-   public function lessons()
+    public function lesson()
     {
-        return $this->morphMany(Lesson::class, 'contentable');
+        return $this->morphOne(Lesson::class, 'content');
     }
 }
 

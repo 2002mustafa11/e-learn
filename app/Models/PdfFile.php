@@ -19,8 +19,8 @@ class PdfFile extends Model
         'page_count'
     ];
 
-    public function lessons()
+    public function lesson()
     {
-        return $this->morphMany(Lesson::class, 'contentable');
+        return $this->morphOne(Lesson::class, 'content');
     }
 }

@@ -28,8 +28,8 @@ class Lesson extends Model
         return $this->belongsTo(Course::class);
     }
 
-    public function contentable()
+    public function content()
     {
-        return $this->morphTo();
+        return $this->morphTo(__FUNCTION__, 'content_type', 'content_id');
     }
 }
