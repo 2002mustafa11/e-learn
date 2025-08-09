@@ -24,9 +24,8 @@ return new class extends Migration
             $table->boolean('is_published')->default(false);
             $table->timestamps();
 
-            $table->uuid('contentable_id')->nullable();
-            $table->string('contentable_type')->nullable();
-
+            $table->uuid('content_id')->nullable();
+            $table->string('content_type')->nullable();
         });
     }
 

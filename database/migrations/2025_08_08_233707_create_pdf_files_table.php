@@ -12,7 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pdf_files', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
+            $table->string('file_path');
+            $table->string('file_name');
+            $table->integer('file_size');
+            $table->integer('page_count');
             $table->timestamps();
         });
     }
