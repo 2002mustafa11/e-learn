@@ -1,6 +1,5 @@
 <?php
 
-// use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\Teacher\YouTube\YouTubeAuthController;
@@ -14,9 +13,25 @@ use App\Http\Controllers\Api\Teacher\PdfFileController;
 use App\Http\Controllers\Api\Teacher\ExamController;
 use App\Http\Controllers\Api\Teacher\QuestionController;
 use App\Http\Controllers\Api\Teacher\AnswerController;
-// Route::get('/user', function (Request $request) {
-//     return $request->user();
-// })->middleware('auth:sanctum');
+use App\Http\Controllers\Api\Teacher\GradeController;
+use App\Http\Controllers\Api\Student\CourseReviewController;
+use App\Http\Controllers\Api\Student\GradeController as StudentGradeController;
+
+Route::prefix('teacher')->middleware(['auth:api','teacher'])->group(function () {
+    Route::post('grades', [GradeController::class, 'save']);
+    Route::get('grades/exam/{examId}', [GradeController::class, 'listByExam']);
+});
+
+Route::prefix('student')->middleware(['auth:api','student'])->group(function () {
+    Route::get('grades', [StudentGradeController::class, 'myGrades']);
+});
+
+
+Route::middleware('auth:api', 'student')->group(function () {
+    Route::post('reviews', [CourseReviewController::class, 'store']);
+    Route::delete('reviews/{courseId}', [CourseReviewController::class, 'destroy']);
+});
+
 Route::post('answers', [AnswerController::class, 'store']);
 Route::delete('answers/{id}', [AnswerController::class, 'destroy']);
 
@@ -26,7 +41,7 @@ Route::post('questions', [QuestionController::class,'store']);
 Route::delete('questions/{id}', [QuestionController::class,'destroy']);
 
 
-Route::prefix('teacher')->middleware(['auth:sanctum', 'teacher'])->group(function () {
+Route::prefix('teacher')->middleware(['auth:api', 'teacher'])->group(function () {
     Route::post('pdf-files', [PdfFileController::class, 'store']);
     Route::delete('pdf-files/{id}', [PdfFileController::class, 'destroy']);
 });

@@ -47,7 +47,9 @@ class CourseRepository
 
     public function find($id)
     {
-        return Course::with('categories', 'user')->find($id);
+        return Course::with(['categories', 'user', 'lessons' => function ($q) {
+            $q->orderBy('order');
+        }])->findOrFail($id);
     }
 
     public function create(array $data)
