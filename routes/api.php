@@ -40,12 +40,10 @@ Route::apiResource('exams', ExamController::class)->only(['store','show','destro
 Route::post('questions', [QuestionController::class,'store']);
 Route::delete('questions/{id}', [QuestionController::class,'destroy']);
 
-
 Route::prefix('teacher')->middleware(['auth:api', 'teacher'])->group(function () {
     Route::post('pdf-files', [PdfFileController::class, 'store']);
     Route::delete('pdf-files/{id}', [PdfFileController::class, 'destroy']);
 });
-
 
 Route::prefix('teacher')->middleware(['auth:api', 'teacher'])->group(function () {
     Route::apiResource('lessons', LessonController::class);

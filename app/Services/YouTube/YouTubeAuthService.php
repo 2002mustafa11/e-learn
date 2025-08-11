@@ -1,5 +1,5 @@
 <?php
-// app/Services/YouTube/YouTubeAuthService.php
+
 namespace App\Services\YouTube;
 
 use Google\Client;
@@ -19,7 +19,7 @@ class YouTubeAuthService
     {
         $cfg = config('services.youtube_api');
         $client = new Client();
-        $client->setAuthConfig(storage_path('app/private/client_secret.json'));
+        $client->setAuthConfig(storage_path('app/private/client_secret_820786433841-igvm5ps7q2rgoa762qgonf6eqbpnf6el.apps.googleusercontent.com.json'));
         $client->addScope($cfg['scopes']);
         $client->setRedirectUri($cfg['redirect_uri']);
         $client->setAccessType('offline');
