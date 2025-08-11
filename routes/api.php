@@ -11,9 +11,21 @@ use App\Http\Controllers\Api\Teacher\CourseController;
 use App\Http\Controllers\Api\Student\CourseController as StudentCourseController;
 use App\Http\Controllers\Api\Teacher\LessonController;
 use App\Http\Controllers\Api\Teacher\PdfFileController;
+use App\Http\Controllers\Api\Teacher\ExamController;
+use App\Http\Controllers\Api\Teacher\QuestionController;
+use App\Http\Controllers\Api\Teacher\AnswerController;
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
 // })->middleware('auth:sanctum');
+Route::post('answers', [AnswerController::class, 'store']);
+Route::delete('answers/{id}', [AnswerController::class, 'destroy']);
+
+
+Route::apiResource('exams', ExamController::class)->only(['store','show','destroy']);
+Route::post('questions', [QuestionController::class,'store']);
+Route::delete('questions/{id}', [QuestionController::class,'destroy']);
+
+
 Route::prefix('teacher')->middleware(['auth:sanctum', 'teacher'])->group(function () {
     Route::post('pdf-files', [PdfFileController::class, 'store']);
     Route::delete('pdf-files/{id}', [PdfFileController::class, 'destroy']);

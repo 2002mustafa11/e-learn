@@ -1,11 +1,11 @@
 <?php
 namespace App\Http\Controllers\Api\Teacher;
 
+use App\Traits\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PdfFileRequest;
 use App\Services\PdfFileService;
-use App\Traits\ApiResponse;
-use Illuminate\Http\Request;
+
 
 class PdfFileController extends Controller
 {
