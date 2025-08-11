@@ -1,15 +1,13 @@
 <?php
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Lesson extends Model
 {
     use HasFactory;
-
-    protected $keyType = 'string';
-    public $incrementing = false;
 
     protected $fillable = [
         'course_id',
@@ -19,8 +17,7 @@ class Lesson extends Model
         'order',
         'is_free',
         'is_published',
-        'contentable_id',
-        'contentable_type'
+        'content_type',
     ];
 
     public function course()
@@ -28,8 +25,13 @@ class Lesson extends Model
         return $this->belongsTo(Course::class);
     }
 
-    public function content()
+    public function pdfFiles()
     {
-        return $this->morphTo(__FUNCTION__, 'content_type', 'content_id');
+        return $this->hasMany(PdfFile::class);
+    }
+
+    public function youtubeVideos()
+    {
+        return $this->hasMany(YoutubeVideo::class);
     }
 }

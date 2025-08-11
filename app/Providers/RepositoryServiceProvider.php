@@ -27,6 +27,16 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(StudentService::class, function ($app) {
             return new StudentService(new StudentRepository());
         });
+        
+        $this->app->bind(
+            \App\Repositories\LessonRepository::class,
+            \App\Repositories\LessonRepository::class
+        );
+
+        $this->app->bind(
+            \App\Services\LessonService::class,
+            \App\Services\LessonService::class
+        );
     }
 
     /**

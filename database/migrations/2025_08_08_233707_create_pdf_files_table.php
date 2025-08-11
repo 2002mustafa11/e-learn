@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('pdf_files', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->uuid('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('lesson_id');
+            $table->foreign('lesson_id')->references('id')->on('lessons')->onDelete('cascade');
             $table->string('file_path');
             $table->string('file_name');
             $table->integer('file_size');

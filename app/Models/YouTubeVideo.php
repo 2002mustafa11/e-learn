@@ -3,33 +3,35 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class YouTubeVideo extends Model
+class YoutubeVideo extends Model
 {
-    protected $table = 'youtube_videos';
+    use HasFactory;
+
     public $incrementing = false;
     protected $keyType = 'string';
-    protected static function boot()
-    {
-        parent::boot();
-        static::creating(function ($user) {
-            if (empty($user->id)) {
-                $user->id = (string) Str::uuid();
-            }
-        });
-    }
+
     protected $fillable = [
-        'user_id', 'youtube_video_id', 'video_url',
-        'title', 'description', 'privacy', 'uploaded_at'
+        'id',
+        'user_id',
+        'lesson_id',
+        'youtube_video_id',
+        'video_url',
+        'title',
+        'description',
+        'privacy',
     ];
 
-    protected $dates = ['uploaded_at'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function lesson()
     {
-        return $this->morphOne(Lesson::class, 'content');
+        return $this->belongsTo(Lesson::class);
     }
 }
-
 

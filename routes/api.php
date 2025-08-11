@@ -3,15 +3,26 @@
 // use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\YouTub\YouTubeAuthController;
-use App\Http\Controllers\Api\YouTub\YouTubeUploadController;
+use App\Http\Controllers\Api\Teacher\YouTube\YouTubeAuthController;
+use App\Http\Controllers\Api\Teacher\YouTube\YouTubeUploadController;
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\Category\CategoryController;
 use App\Http\Controllers\Api\Teacher\CourseController;
 use App\Http\Controllers\Api\Student\CourseController as StudentCourseController;
+use App\Http\Controllers\Api\Teacher\LessonController;
+use App\Http\Controllers\Api\Teacher\PdfFileController;
 // Route::get('/user', function (Request $request) {
 //     return $request->user();
 // })->middleware('auth:sanctum');
+Route::prefix('teacher')->middleware(['auth:sanctum', 'teacher'])->group(function () {
+    Route::post('pdf-files', [PdfFileController::class, 'store']);
+    Route::delete('pdf-files/{id}', [PdfFileController::class, 'destroy']);
+});
+
+
+Route::prefix('teacher')->middleware(['auth:api', 'teacher'])->group(function () {
+    Route::apiResource('lessons', LessonController::class);
+});
 
 Route::prefix('teacher')->middleware(['auth:api', 'teacher'])->group(function () {
     Route::apiResource('courses', CourseController::class);

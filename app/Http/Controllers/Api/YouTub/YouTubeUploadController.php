@@ -59,6 +59,7 @@ class YouTubeUploadController extends Controller
         $client = $this->makeClient();
         $youtube = new YouTube($client);
 
+
         $snippet = new YouTube\VideoSnippet();
         $snippet->setTitle(substr($r->title, 0, 200));
         $snippet->setDescription(substr($r->description ?? '', 0, 500));
@@ -96,6 +97,7 @@ class YouTubeUploadController extends Controller
             return response()->json(['error' => 'Upload failed'], 500);
         }
 
+        
         $videoId = $uploaded['id'];
         $videoUrl = "https://www.youtube.com/watch?v={$videoId}";
 
@@ -106,7 +108,6 @@ class YouTubeUploadController extends Controller
             'title'            => $uploaded['snippet']['title'] ?? $r->title,
             'description'      => $uploaded['snippet']['description'] ?? '',
             'privacy'          => $r->privacy,
-            'uploaded_at'      => Carbon::now(),
         ]);
 
         return response()->json([
