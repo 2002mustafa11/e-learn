@@ -23,6 +23,7 @@ class YouTubeUploadController extends Controller
         try {
             $validated = $request->validate([
                 'video' => 'required|file|mimetypes:video/*|max:102400',
+                'lesson_id' => 'required',
                 'title' => 'required|string|max:100',
                 'description' => 'nullable|string|max:5000',
                 'privacy' => 'required|in:public,unlisted,private',
@@ -35,10 +36,7 @@ class YouTubeUploadController extends Controller
 
             return $this->successResponse(
                 [
-                    'video_id' => $video['youtube_id'],
-                    'title' => $video['title'],
-                    'url' => $video['url'],
-                    'thumbnail' => $video['thumbnail'] ?? null
+                    $video
                 ],
                 'Video uploaded successfully',
                 201

@@ -1,10 +1,11 @@
 <?php
-namespace App\Http\Controllers\Api\Teacher;
+namespace App\Http\Controllers\Api\Student;
 
 use App\Traits\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CorrectionRequest;
 use App\Services\CorrectionService;
+
 
 class CorrectionController extends Controller
 {

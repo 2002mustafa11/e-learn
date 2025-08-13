@@ -22,12 +22,12 @@ class CorrectionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'student_id'      => 'required|exists:users,id',
+            // 'student_id'      => 'required|exists:users,id',
             'exam_id'         => 'required|exists:exams,id',
             'question_id'     => 'required|exists:questions,id',
             'student_answer'  => 'required|string',
-            'correct_answer'  => 'required|string',
-            'is_correct'      => 'required|boolean',
+            // 'correct_answer'  => 'required|string',
+            // 'is_correct'      => 'required|boolean',
         ];
     }
 }

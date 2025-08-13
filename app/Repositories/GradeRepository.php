@@ -11,7 +11,7 @@ class GradeRepository
     }
 
     public function create(array $data) {
-        return Grade::create($data);
+        return Grade::create($data); 
     }
 
     public function update($id, array $data) {

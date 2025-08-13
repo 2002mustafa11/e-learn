@@ -15,14 +15,19 @@ use App\Http\Controllers\Api\Teacher\QuestionController;
 use App\Http\Controllers\Api\Teacher\AnswerController;
 use App\Http\Controllers\Api\Teacher\GradeController;
 use App\Http\Controllers\Api\Student\CourseReviewController;
+use App\Http\Controllers\Api\Student\CorrectionController;
 use App\Http\Controllers\Api\Student\GradeController as StudentGradeController;
 
+Route::prefix('student')->middleware(['auth:api','student'])->group(function () {
+    Route::post('correction', [CorrectionController::class, 'store']);
+});
+
 Route::prefix('teacher')->middleware(['auth:api','teacher'])->group(function () {
-    Route::post('grades', [GradeController::class, 'save']);
     Route::get('grades/exam/{examId}', [GradeController::class, 'listByExam']);
 });
 
 Route::prefix('student')->middleware(['auth:api','student'])->group(function () {
+    Route::post('grades', [GradeController::class, 'save']);
     Route::get('grades', [StudentGradeController::class, 'myGrades']);
 });
 

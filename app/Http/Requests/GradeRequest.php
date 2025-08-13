@@ -22,9 +22,9 @@ class GradeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'student_id' => 'required|exists:users,id',
+            // 'student_id' => 'required|exists:users,id',
             'exam_id'    => 'required|exists:exams,id',
-            'score'      => 'required|numeric|min:0|max:100',
+            // 'score'      => 'required|numeric|min:0|max:100',
         ];
     }
 }

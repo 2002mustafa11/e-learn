@@ -25,4 +25,9 @@ class Question extends Model
     {
         return $this->hasMany(Answer::class);
     }
+
+    // public function correction()
+    // {
+    //     return $this->hasOne(Correction::class);
+    // }
 }

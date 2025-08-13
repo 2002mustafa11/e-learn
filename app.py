@@ -145,4 +145,7 @@ def start_fastapi():
     print(f"🚀 تشغيل FastAPI على http://0.0.0.0:{PORT}")
     uvicorn.run(app, host="0.0.0.0", port=PORT)
 
-threading.Thread(target=start_fastapi, daemon=True).start()
+# threading.Thread(target=start_fastapi, daemon=True).start()
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=PORT)
+

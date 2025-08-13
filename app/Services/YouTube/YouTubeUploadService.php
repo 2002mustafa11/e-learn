@@ -1,5 +1,5 @@
 <?php
-// app/Services/YouTube/YouTubeUploadService.php
+
 namespace App\Services\YouTube;
 
 use Google\Client;
@@ -26,7 +26,7 @@ class YouTubeUploadService
     {
         $cfg = config('services.youtube_api');
         $client = new Client();
-        $client->setAuthConfig(storage_path('app/private/client_secret.json'));
+        $client->setAuthConfig(storage_path('app/private/client_secret_820786433841-igvm5ps7q2rgoa762qgonf6eqbpnf6el.apps.googleusercontent.com.json'));
         $client->addScope($cfg['scopes']);
         $client->setAccessType('offline');
         $client->setIncludeGrantedScopes(true);
@@ -108,12 +108,13 @@ class YouTubeUploadService
 
             return $this->videoRepository->createVideo([
                 'user_id' => auth()->id(),
+                'lesson_id' => $data['lesson_id'],
                 'youtube_video_id' => $uploadedVideo['id'],
                 'video_url' => "https://www.youtube.com/watch?v={$uploadedVideo['id']}",
                 'title' => $uploadedVideo['snippet']['title'] ?? $data['title'],
                 'description' => $uploadedVideo['snippet']['description'] ?? $data['description'] ?? '',
                 'privacy' => $uploadedVideo['status']['privacyStatus'] ?? $data['privacy'],
-                'thumbnail_url' => $uploadedVideo['snippet']['thumbnails']['default']['url'] ?? null,
+                // 'thumbnail_url' => $uploadedVideo['snippet']['thumbnails']['default']['url'] ?? null,
             ]);
 
         } catch (\Google\Service\Exception $e) {
