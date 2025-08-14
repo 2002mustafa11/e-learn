@@ -45,6 +45,25 @@ class CourseRepository
         return Course::with('categories', 'user')->get();
     }
 
+    public function findWithLessons($courseId, $allLessons = false)
+    {
+        return Course::with([
+            'categories',
+            'user',
+            'lessons' => function ($q) use ($allLessons) {
+                if (!$allLessons) {
+                    $q->where('is_free', 1);
+                }
+                $q->orderBy('order');
+            }
+        ])->findOrFail($courseId);
+    }
+    
+    public function findOrFail($courseId)
+    {
+        return Course::findOrFail($courseId);
+    }
+
     public function find($id)
     {
         return Course::with(['categories', 'user', 'lessons' => function ($q) {

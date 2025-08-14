@@ -85,6 +85,11 @@ class User extends Authenticatable implements JWTSubject
            return $this->belongsToMany(User::class, 'parent_student', 'student_id', 'parent_id')
                        ->withTimestamps();
        }
+    public function courseSales()
+    {
+      return $this->hasMany(CourseSale::class, 'user_id', 'id');
+    }
+
     public function isAdmin()
     {
         return $this->role=='admin';

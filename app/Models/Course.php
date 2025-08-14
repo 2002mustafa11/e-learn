@@ -26,4 +26,10 @@ class Course extends Model
     {
         return $this->hasMany(Lesson::class)->orderBy('order');
     }
+
+    public function sales()
+    {
+        return $this->hasMany(CourseSale::class);
+    }
+
 }

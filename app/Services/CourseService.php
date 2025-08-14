@@ -7,6 +7,7 @@ use App\Repositories\CourseRepository;
     use Illuminate\Support\Str;
     use Intervention\Image\ImageManager;
     use Intervention\Image\Drivers\Gd\Driver;
+    use Illuminate\Support\Facades\Gate;
 
 class CourseService
 {
@@ -21,9 +22,18 @@ class CourseService
     {
         return $this->repo->allWithFilters($filters);
     }
+
     public function getAll()
     {
         return $this->repo->all();
+    }
+
+    public function getCourse($courseId)
+    {
+        $course=$this->repo->findOrFail($courseId);
+        $allLessons = Gate::allows('viewAllLessons', $course);
+
+        return $this->repo->findWithLessons($courseId, $allLessons);
     }
 
     public function getCourseById($id)

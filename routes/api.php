@@ -17,9 +17,11 @@ use App\Http\Controllers\Api\Teacher\GradeController;
 use App\Http\Controllers\Api\Student\CourseReviewController;
 use App\Http\Controllers\Api\Student\CorrectionController;
 use App\Http\Controllers\Api\Student\GradeController as StudentGradeController;
+use App\Http\Controllers\Api\Student\CoursePurchaseController;
 
 Route::prefix('student')->middleware(['auth:api','student'])->group(function () {
     Route::post('correction', [CorrectionController::class, 'store']);
+    // Route::post('purchase', [CoursePurchaseController::class, 'purchase']);
 });
 
 Route::prefix('teacher')->middleware(['auth:api','teacher'])->group(function () {
@@ -30,7 +32,6 @@ Route::prefix('student')->middleware(['auth:api','student'])->group(function () 
     Route::post('grades', [GradeController::class, 'save']);
     Route::get('grades', [StudentGradeController::class, 'myGrades']);
 });
-
 
 Route::middleware('auth:api', 'student')->group(function () {
     Route::post('reviews', [CourseReviewController::class, 'store']);

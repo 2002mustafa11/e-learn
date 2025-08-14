@@ -7,7 +7,7 @@ use App\Services\CourseService;
 use App\Services\CourseSaleService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Gate;
 class CourseController extends Controller
 {
     use ApiResponse;
@@ -30,22 +30,27 @@ class CourseController extends Controller
         return $this->successResponse($courses, 'Courses fetched successfully.');
     }
 
-    public function show($id)
+    public function show($courseId)
     {
-        $course = $this->service->getCourseById($id);
-
-        if (!$course) {
-            return $this->errorResponse('Course not found.', [], 404);
-        }
+        $course = $this->service->getCourse($courseId);
 
         return $this->successResponse($course, 'Course fetched successfully.');
     }
+    // public function show($id)
+    // {
+    //     $course = $this->service->getCourseById($id);
+    //     if (!$course) {
+    //         return $this->errorResponse('Course not found.', [], 404);
+    //     }
+
+    //     return $this->successResponse($course, 'Course fetched successfully.');
+    // }
 
     public function purchase(Request $request, $courseId)
     {
         $request->validate([
             'price'           => 'required|numeric|min:0',
-            'payment_method'  => 'required|string|in:paypal,credit_card,bank_transfer', 
+            'payment_method'  => 'required|string|in:paypal,credit_card,bank_transfer',
         ]);
         try {
             $sale = $this->CourseSaleService->purchaseCourse(

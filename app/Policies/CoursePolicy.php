@@ -8,6 +8,15 @@ use Illuminate\Auth\Access\Response;
 
 class CoursePolicy
 {
+
+    public function viewAllLessons(User $user, Course $course): bool
+    {
+       return $user->courseSales()
+                   ->where('course_id', $course->id)
+                   ->where('payment_status', 'paid')
+                   ->exists();
+    }
+
     /**
      * Determine whether the user can view any models.
      */

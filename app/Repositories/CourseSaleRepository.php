@@ -9,7 +9,7 @@ class CourseSaleRepository
     public function create(array $data)
     {
         return CourseSale::create($data);
-    }
+    } 
 
     public function findByUserAndCourse($userId, $courseId)
     {
