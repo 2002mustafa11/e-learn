@@ -15,7 +15,7 @@ class Correction extends Model
         'question_id',
         'student_answer',
         'correct_answer',
-        'is_correct'
+        'is_correct' 
     ];
 
     public function student()

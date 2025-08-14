@@ -15,10 +15,14 @@ nest_asyncio.apply()
 # إعداد ngrok مع التوكن الخاص بك
 conf.get_default().auth_token = "30mq11coJsgLP3bNXZ7ig3czFUJ_5X53izvRTwuvGAHz5V3Jt"
 
-# إنشاء كائن OpenAI للاتصال بـ OpenRouter API
+# إنشاء كائن OpenAI للاتصال بـ OpenRouter API (API Key الحقيقي)
 client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
-    api_key="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"
+    api_key="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",
+    default_headers={
+        "HTTP-Referer": "https://yourapp.example.com",  # غيّرها برابط مشروعك
+        "X-Title": "My FastAPI App"
+    }
 )
 
 GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbybdFsVNr36AjOzQtbDmO-DCckD57D0s4wEb9MUvEDRO9ZnQeK8HI1uthNMVGB5LB0_4A/exec"
